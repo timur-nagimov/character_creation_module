@@ -1,7 +1,15 @@
 from random import randint
+from graphic_arts.start_game_banner import run_screensaver
 
 
 def attack(char_name: str, char_class: str) -> str:
+    """
+    Calculate damage by a character class.
+
+    Keywords arguments:
+    char_name -- player's name
+    char_class -- player's  class
+    """
     if char_class == 'warrior':
         return (f'{char_name} нанёс урон противнику '
                 f'равный {5 + randint(3, 5)}')
@@ -11,9 +19,17 @@ def attack(char_name: str, char_class: str) -> str:
     if char_class == 'healer':
         return (f'{char_name} нанёс урон противнику '
                 f'равный {5 + randint(-3, -1)}')
+    return
 
 
 def defence(char_name: str, char_class: str) -> str:
+    """
+    Calculate amount of damage blocked.
+
+    Keywords arguments:
+    char_name -- player's name
+    char_class -- player's  class
+    """
     if char_class == 'warrior':
         return (f'{char_name} блокировал {10 + randint(5, 10)} урона')
     if char_class == 'mage':
@@ -23,6 +39,13 @@ def defence(char_name: str, char_class: str) -> str:
 
 
 def special(char_name: str, char_class: str) -> str:
+    """
+    Activate special ability.
+
+    Keywords arguments:
+    char_name -- player's name
+    char_class -- player's  class
+    """
     if char_class == 'warrior':
         return (f'{char_name} применил специальное умение '
                 f'«Выносливость {80 + 25}»')
@@ -33,6 +56,14 @@ def special(char_name: str, char_class: str) -> str:
 
 
 def start_training(char_name: str, char_class: str) -> str:
+    """
+    Start training.
+    Players can try there difference game mechanics there.
+
+    Keywords arguments:
+    char_name -- player's name
+    char_class -- player's  class
+    """
     if char_class == 'warrior':
         print(f'{char_name}, ты Воитель — отличный боец ближнего боя.')
     if char_class == 'mage':
@@ -57,6 +88,7 @@ def start_training(char_name: str, char_class: str) -> str:
 
 
 def choice_char_class() -> str:
+    """Invite the player to select a game class."""
     approve_choice: str = ''
     char_class: str = ''
     while approve_choice != 'y':
@@ -91,6 +123,15 @@ ANTIBONUS: float = 0.8
 
 
 def add_rep(current_rep: float, rep_points: int, buf_effect: bool) -> float:
+    """
+    Add some reputation points to the player.
+
+    Keywords arguments:
+    current_rep -- current value
+    rep_points -- how many points to add
+    buf_effect -- bonus status
+
+    """
     current_rep += rep_points
     if buf_effect:
         return current_rep * BONUS
@@ -99,13 +140,22 @@ def add_rep(current_rep: float, rep_points: int, buf_effect: bool) -> float:
 
 def remove_rep(current_rep: float, rep_points: int,
                debuf_effect: bool) -> float:
+    """
+    Substracts some points from players'.
+
+    Keywords arguments:
+    current_rep -- current value
+    rep_points -- how many points to add
+    debuf_effect -- debuff status
+    """
     current_rep -= rep_points
     if debuf_effect:
         return current_rep * ANTIBONUS
     return current_rep
 
 
-def main(duel_res: list[tuple[int, str, bool]]) -> str:
+if __name__ == '__main__':
+    run_screensaver()
     print('Приветствую тебя, искатель приключений!')
     print('Прежде чем начать игру...')
     char_name: str = input('...назови себя: ')
@@ -115,14 +165,3 @@ def main(duel_res: list[tuple[int, str, bool]]) -> str:
     print('Воитель, Маг, Лекарь')
     char_class: str = choice_char_class()
     print(start_training(char_name, char_class))
-
-    current_rep: float = 0.0
-    for rep, result, effect in duel_res:
-        if result == 'success':
-            current_rep = add_rep(current_rep, rep, effect)
-        if result == 'failure':
-            current_rep = remove_rep(current_rep, rep, effect)
-    return (
-        f'После {len(duel_res)} поединков, '
-        f'репутация персонажа — {current_rep:.3f} очков.'
-    )
